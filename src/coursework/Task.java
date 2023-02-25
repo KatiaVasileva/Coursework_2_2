@@ -2,6 +2,7 @@ package coursework;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public abstract class Task {
@@ -19,7 +20,7 @@ public abstract class Task {
         this.title = title;
         this.description = description;
         this.type = type;
-        this.localDateTime = localDateTime;
+        this.localDateTime = customizedDateTime(localDateTime);
         id = ++idGenerator;
     }
 
@@ -57,6 +58,12 @@ public abstract class Task {
     public String toString() {
         return "Название задачи: " + title + "\n   Описание задачи: " + description +
                 "\n   Тип задачи: " + type.getTaskType() + "\n   Дата и время создания задачи: " + localDateTime;
+    }
+
+    public LocalDateTime customizedDateTime(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[yyyy MM dd] [HH:mm:ss]");
+        String text = localDateTime.format(formatter);
+        return LocalDateTime.parse(text, formatter);
     }
 
     @Override

@@ -3,6 +3,7 @@ package coursework;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -63,8 +64,8 @@ public class Main {
                     break;
                 case "5":
                     System.out.println("Введите идентификационный номер задачи: ");
-                    taskId = scanner.nextInt();
                     try {
+                        taskId = scanner.nextInt();
                         System.out.println("Существующее название задачи: " + taskService.getTaskMap().get(taskId).getTitle());
                         System.out.println("Введите новое название задачи: ");
                         scanner.nextLine();
@@ -73,14 +74,16 @@ public class Main {
                         System.out.println("Название изменено");
                     } catch (NullPointerException e) {
                         System.out.println("Задача не найдена!");
+                    } catch (InputMismatchException e) {
+                        System.out.println("Ошибка ввода! Необходимо ввести номер задачи.");
                     }
                     getMenu();
                     scanner.nextLine();
                     break;
                 case "6":
                     System.out.println("Введите идентификационный номер задачи: ");
-                    taskId = scanner.nextInt();
                     try {
+                        taskId = scanner.nextInt();
                         System.out.println("Существующее описание задачи: " + taskService.getTaskMap().get(taskId).getDescription());
                         System.out.println("Введите новое описание задачи: ");
                         scanner.nextLine();
@@ -89,6 +92,8 @@ public class Main {
                         System.out.println("Описание изменено");
                     } catch (NullPointerException e) {
                         System.out.println("Задача не найдена!");
+                    } catch (InputMismatchException e) {
+                        System.out.println("Ошибка ввода! Необходимо ввести номер задачи.");
                     }
                     getMenu();
                     scanner.nextLine();
@@ -190,7 +195,7 @@ public class Main {
             case "5":
                 return new YearlyTask(title, description, type, LocalDateTime.now());
             default:
-                System.out.println("Ошибка! Введено некорректное значение!");
+                System.out.println("Ошибка ввода! Введите значение, указанное в меню (цифры от 1 до 5)");
                 return getRegularity(title, description, type, localDateTime);
         }
     }

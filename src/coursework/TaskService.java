@@ -74,9 +74,17 @@ public class TaskService {
     }
 
     public Task updateDescription(int id, String description) {
-        Task task = getTaskMap().get(id);
+        for (Map.Entry<Integer, Task> task : getTaskMap().entrySet()) {
+            if (task.getKey() == id) {
+                Task updatedTask = getTaskMap().get(id);
+                updatedTask.setDescription(description);
+                return updatedTask;
+            }
+        }
+        throw new TaskNotFoundException("Такой задачи не существует!");
+        /*Task task = getTaskMap().get(id);
         task.setDescription(description);
-        return task;
+        return task;*/
     }
 
     public void checkTaskAvailability(Map<Integer, Task> map) throws TaskNotFoundException {
@@ -90,12 +98,4 @@ public class TaskService {
             throw new TaskNotFoundException("Задач не найдено!");
         }
     }
-
-    /*public void checkTaskId(int id) throws TaskNotFoundException {
-        for (Map.Entry<Integer, Task> task : getTaskMap().entrySet()) {
-            if (task.getKey() != id || id == 0) {
-                throw new TaskNotFoundException("Задача не найдена!");
-            }
-        }
-    }*/
 }

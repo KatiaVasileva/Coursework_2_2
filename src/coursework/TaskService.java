@@ -32,7 +32,7 @@ public class TaskService {
         taskMap.forEach((key, value) -> System.out.println(key + ". " + value));
     }
 
-    public Task removeTask(int id) throws TaskNotFoundException{
+    public Task removeTask(int id) {
         for (Map.Entry<Integer, Task> task : getTaskMap().entrySet()) {
             if (task.getKey() == id) {
                 return taskMap.remove(id);
@@ -45,7 +45,7 @@ public class TaskService {
         removedTasks.add(task);
     }
 
-    public void printAllRemovedTasks(List<Task> removedTasks) throws TaskNotFoundException{
+    public void printAllRemovedTasks(List<Task> removedTasks) {
         if (removedTasks.isEmpty()) {
             throw new TaskNotFoundException("Архив пустой!");
         }
@@ -58,8 +58,25 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public void printTasksByDate(List<Map.Entry<Integer, Task>> tasksByDate) throws TaskNotFoundException {
+    public void printTasksByDate(List<Map.Entry<Integer, Task>> tasksByDate) {
         tasksByDate.forEach(task -> System.out.println(task.getKey() + ". " + task.getValue()));
+    }
+
+    public Task updateTitle(int id, String title){
+        for (Map.Entry<Integer, Task> task : getTaskMap().entrySet()) {
+            if (task.getKey() == id) {
+                Task updatedTask = getTaskMap().get(id);
+                updatedTask.setTitle(title);
+                return updatedTask;
+            }
+        }
+        throw new TaskNotFoundException("Такой задачи не существует!");
+    }
+
+    public Task updateDescription(int id, String description) {
+        Task task = getTaskMap().get(id);
+        task.setDescription(description);
+        return task;
     }
 
     public void checkTaskAvailability(Map<Integer, Task> map) throws TaskNotFoundException {
@@ -74,4 +91,11 @@ public class TaskService {
         }
     }
 
+    /*public void checkTaskId(int id) throws TaskNotFoundException {
+        for (Map.Entry<Integer, Task> task : getTaskMap().entrySet()) {
+            if (task.getKey() != id || id == 0) {
+                throw new TaskNotFoundException("Задача не найдена!");
+            }
+        }
+    }*/
 }

@@ -11,26 +11,14 @@ public class Main {
         TaskService taskService = new TaskService();
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Выберите: \n 1 - добавить новую задачу \n 2 - вывести список задач на экран" +
-                "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - архив задач (удаленных) " +
-                "\n 6 - выйти \n");
+        getMenu();
 
-        while (scanner.hasNext()) {
+        while (scanner.hasNextLine()) {
             String menu = scanner.nextLine();
-            try {
-                checkArgument(menu);
-            } catch (IncorrectInputException e) {
-                System.out.println(e);
-                System.out.println("\nВыберите: \n 1 - добавить новую задачу \n 2 - вывести список задач на экран" +
-                        "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - архив задач (удаленных) " +
-                        "\n 6 - выйти \n");
-            }
             switch (menu) {
                 case "1":
                     taskService.addTask(getRegularity(getTaskTitle(), getTaskDescription(), getTaskType(), LocalDateTime.now()));
-                    System.out.println("\nВыберите: \n 1 - добавить новую задачу \n 2 - вывести список задач на экран" +
-                            "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - архив задач (удаленных) " +
-                            "\n 6 - выйти \n");
+                    getMenu();
                     break;
                 case "2":
                     System.out.println("Список всех задач");
@@ -40,9 +28,7 @@ public class Main {
                     } catch (TaskNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
-                    System.out.println("\nВыберите: \n 1 - добавить новую задачу \n 2 - вывести список задач на экран" +
-                            "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - архив задач (удаленных) " +
-                            "\n 6 - выйти \n");
+                    getMenu();
                     break;
                 case "3":
                     System.out.println("Введите идентификационный номер задачи, которую нужно удалить: ");
@@ -53,9 +39,8 @@ public class Main {
                     } catch (TaskNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
-                    System.out.println("\nВыберите: \n 1 - добавить новую задачу \n 2 - вывести список задач на экран" +
-                            "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - архив задач (удаленных) " +
-                            "\n 6 - выйти \n");
+                    getMenu();
+                    scanner.nextLine();
                     break;
                 case "4":
                     System.out.println("Введите дату в формате ГГГГ-ММ-ДД: ");
@@ -70,34 +55,58 @@ public class Main {
                         } catch (TaskNotFoundException e) {
                             System.out.println(e.getMessage());
                         }
-                        System.out.println("\nВыберите: \n 1 - добавить новую задачу \n 2 - вывести список задач на экран" +
-                            "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - архив задач (удаленных) " +
-                            "\n 6 - выйти \n");
+                        getMenu();
                     } catch (DateTimeParseException e) {
                         System.out.println(e.getMessage());
-                        System.out.println("\nВыберите: \n 1 - добавить новую задачу \n 2 - вывести список задач на экран" +
-                                "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - архив задач (удаленных) " +
-                                "\n 6 - выйти \n");
+                        getMenu();
                     }
                     break;
                 case "5":
+                    System.out.println("Введите идентификационный номер задачи: ");
+                    taskId = scanner.nextInt();
+                    try {
+                        System.out.println("Существующее название задачи: " + taskService.getTaskMap().get(taskId).getTitle());
+                        System.out.println("Введите новое название задачи: ");
+                        scanner.nextLine();
+                        String title = scanner.nextLine();
+                        taskService.updateTitle(taskId, title);
+                        System.out.println("Название изменено");
+                    } catch (NullPointerException e) {
+                        System.out.println("Задача не найдена!");
+                    }
+                    getMenu();
+                    scanner.nextLine();
+                    break;
+                case "6":
+                    System.out.println("Введите идентификационный номер задачи: ");
+                    taskId = scanner.nextInt();
+                    try {
+                        System.out.println("Существующее описание задачи: " + taskService.getTaskMap().get(taskId).getDescription());
+                        System.out.println("Введите новое описание задачи: ");
+                        scanner.nextLine();
+                        String description = scanner.nextLine();
+                        taskService.updateDescription(taskId, description);
+                        System.out.println("Описание изменено");
+                    } catch (NullPointerException e) {
+                        System.out.println("Задача не найдена!");
+                    }
+                    getMenu();
+                    scanner.nextLine();
+                    break;
+                case "7":
                     System.out.println("Архив задач (удаленных)");
                     try {
                         taskService.printAllRemovedTasks(taskService.getRemovedTasks());
                     } catch (TaskNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
-                    System.out.println("\nВыберите: \n 1 - добавить новую задачу \n 2 - вывести список задач на экран" +
-                            "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - архив задач (удаленных) " +
-                            "\n 6 - выйти \n");
+                    getMenu();
                     break;
-                case "6":
+                case "8":
                     System.exit(0);
                 default:
-                    System.out.println("Ошибка ввода! Введите значение, указанное в меню");
-                    System.out.println("\nВыберите: \n 1 - добавить новую задачу \n 2 - вывести список задач на экран" +
-                            "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - архив задач (удаленных) " +
-                            "\n 6 - выйти \n");
+                    System.out.println("Ошибка ввода! Введите значение, указанное в меню (цифры от 1 до 8)");
+                    getMenu();
             }
         }
         scanner.close();
@@ -184,6 +193,12 @@ public class Main {
                 System.out.println("Ошибка! Введено некорректное значение!");
                 return getRegularity(title, description, type, localDateTime);
         }
+    }
+
+    public static void getMenu() {
+        System.out.println("\nВыберите: \n 1 - добавить новую задачу \n 2 - вывести список всех задач" +
+                "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - редактировать название задачи" +
+                "\n 6 - редактировать описание задачи \n 7 - архив задач (удаленных) \n 8 - выйти \n");
     }
 
     // Блок проверки вводимых значений

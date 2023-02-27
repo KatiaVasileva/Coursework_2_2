@@ -17,6 +17,11 @@ public class MonthlyTask extends Task{
         return getLocalDateTime().getDayOfMonth() == localDate.getDayOfMonth();
     }
 
+    public LocalDate getNextDate(LocalDateTime localDateTime) {
+        LocalDate localDate = localDateTime.toLocalDate();
+        return localDate.withMonth(getLocalDateTime().getMonthValue() + 1);
+    }
+
     @Override
     public String toString() {
         return super.toString() + "\n   Повторяемость: ежемесячная";

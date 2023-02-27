@@ -19,6 +19,12 @@ public class YearlyTask extends Task{
     }
 
     @Override
+    public LocalDate getNextDate(LocalDateTime localDateTime) {
+        LocalDate localDate = localDateTime.toLocalDate();
+        return localDate.withYear(getLocalDateTime().getYear() + 1);
+    }
+
+    @Override
     public String toString() {
         return super.toString() + "\n   Повторяемость: ежегодная";
     }

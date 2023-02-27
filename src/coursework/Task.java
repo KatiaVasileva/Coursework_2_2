@@ -54,6 +54,8 @@ public abstract class Task {
 
     public abstract boolean appearsIn(LocalDate localDate);
 
+    public abstract LocalDate getNextDate(LocalDateTime localDateTime);
+
     @Override
     public String toString() {
         return "Название задачи: " + title + "\n   Описание задачи: " + description +

@@ -44,6 +44,11 @@ public class Main {
                     scanner.nextLine();
                     break;
                 case "4":
+                    System.out.println("Список задач на завтра ");
+                    taskService.getTasksForNextDay(taskService.getTaskMap());
+                    getMenu();
+                    break;
+                case "5":
                     System.out.println("Введите дату в формате ГГГГ-ММ-ДД: ");
                     String date = scanner.nextLine();
                     try {
@@ -62,7 +67,21 @@ public class Main {
                         getMenu();
                     }
                     break;
-                case "5":
+                case "6":
+                    System.out.println("Введите идентификационный номер задачи: ");
+                    try {
+                        taskId = scanner.nextInt();
+                        System.out.println("Следующая дата выполнения задачи " + taskId + ": ");
+                        taskService.getInfoAboutNextDateTime(taskId);
+                    } catch (NullPointerException e) {
+                        System.out.println("Задача не найдена!");
+                    } catch (InputMismatchException e) {
+                        System.out.println("Ошибка ввода! Необходимо ввести номер задачи.");
+                    }
+                    getMenu();
+                    scanner.nextLine();
+                    break;
+                case "7":
                     System.out.println("Введите идентификационный номер задачи: ");
                     try {
                         taskId = scanner.nextInt();
@@ -80,7 +99,7 @@ public class Main {
                     getMenu();
                     scanner.nextLine();
                     break;
-                case "6":
+                case "8":
                     System.out.println("Введите идентификационный номер задачи: ");
                     try {
                         taskId = scanner.nextInt();
@@ -98,7 +117,7 @@ public class Main {
                     getMenu();
                     scanner.nextLine();
                     break;
-                case "7":
+                case "9":
                     System.out.println("Архив задач (удаленных)");
                     try {
                         taskService.printAllRemovedTasks(taskService.getRemovedTasks());
@@ -107,7 +126,7 @@ public class Main {
                     }
                     getMenu();
                     break;
-                case "8":
+                case "10":
                     System.exit(0);
                 default:
                     System.out.println("Ошибка ввода! Введите значение, указанное в меню (цифры от 1 до 8)");
@@ -201,9 +220,17 @@ public class Main {
     }
 
     public static void getMenu() {
-        System.out.println("\nВыберите: \n 1 - добавить новую задачу \n 2 - вывести список всех задач" +
-                "\n 3 - удалить задачу \n 4 - вывести список задач на день \n 5 - редактировать название задачи" +
-                "\n 6 - редактировать описание задачи \n 7 - архив задач (удаленных) \n 8 - выйти \n");
+        System.out.println("\nВыберите: " +
+                "\n 1 - добавить новую задачу " +
+                "\n 2 - вывести список всех задач" +
+                "\n 3 - удалить задачу " +
+                "\n 4 - вывести список задач на завтра" +
+                "\n 5 - вывести список задач на указанную дату " +
+                "\n 6 - получить информацию о следующей дате выполнения задачи (по номеру задачи)" +
+                "\n 7 - редактировать название задачи" +
+                "\n 8 - редактировать описание задачи " +
+                "\n 9 - архив задач (удаленных) " +
+                "\n 10 - выйти \n");
     }
 
     // Блок проверки вводимых значений

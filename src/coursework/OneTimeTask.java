@@ -29,6 +29,10 @@ public class OneTimeTask extends Task{
         return timeOfTask.equals(localDate);
     }
 
+    public LocalDate getNextDate(LocalDateTime localDateTime) {
+        return timeOfTask;
+    }
+
     @Override
     public String toString() {
         return super.toString() + "\n   Повторяемость: однократная. Срок выполнения - " + timeOfTask;

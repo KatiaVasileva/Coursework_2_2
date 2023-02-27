@@ -18,6 +18,12 @@ public class DailyTask extends Task{
     }
 
     @Override
+    public LocalDate getNextDate(LocalDateTime localDateTime) {
+        LocalDate localDate = localDateTime.toLocalDate();
+        return localDate.plusDays(1);
+    }
+
+    @Override
     public String toString() {
         return super.toString() + "\n   Повторяемость: ежедневная";
     }

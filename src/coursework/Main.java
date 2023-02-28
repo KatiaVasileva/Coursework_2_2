@@ -57,7 +57,7 @@ public class Main {
                         System.out.println("Список задач на " + localDate + ":");
                         try {
                             taskService.checkTaskAvailability(taskService.getAllByDate(localDate));
-                            taskService.printTasksByDate(taskService.getAllByDate(localDate));
+                            taskService.printTasks(taskService.getAllByDate(localDate));
                         } catch (TaskNotFoundException e) {
                             System.out.println(e.getMessage());
                         }
@@ -120,7 +120,7 @@ public class Main {
                 case "9":
                     System.out.println("Архив задач (удаленных)");
                     try {
-                        taskService.printAllRemovedTasks(taskService.getRemovedTasks());
+                        taskService.printTasks(taskService.getRemovedTasks());
                     } catch (TaskNotFoundException e) {
                         System.out.println(e.getMessage());
                     }

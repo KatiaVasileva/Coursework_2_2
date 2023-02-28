@@ -45,7 +45,7 @@ public class TaskService {
         removedTasks.add(task);
     }
 
-    public void printAllRemovedTasks(List<Task> removedTasks) {
+    public void printTasks(List<Task> removedTasks) {
         if (removedTasks.isEmpty()) {
             throw new TaskNotFoundException("Архив пустой!");
         }
@@ -59,9 +59,9 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public void printTasksByDate(List<Task> tasksByDate) {
+    /*public void printTasksByDate(List<Task> tasksByDate) {
         tasksByDate.forEach(System.out::println);
-    }
+    }*/
 
     public void updateTitle(int id, String title){
         for (Map.Entry<Integer, Task> task : getTaskMap().entrySet()) {

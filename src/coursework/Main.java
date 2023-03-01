@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -24,7 +26,6 @@ public class Main {
                 case "2":
                     System.out.println("Список всех задач");
                     try {
-                        taskService.checkTaskAvailability(taskService.getTaskMap());
                         taskService.printAllTasks(taskService.getTaskMap());
                     } catch (TaskNotFoundException e) {
                         System.out.println(e.getMessage());
@@ -45,7 +46,11 @@ public class Main {
                     break;
                 case "4":
                     System.out.println("Список задач на завтра ");
-                    taskService.getTasksForNextDay(taskService.getTaskMap());
+                    try {
+                        taskService.printTasks(taskService.getTasksForNextDay());
+                    } catch (TaskNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
                     getMenu();
                     break;
                 case "5":
@@ -56,8 +61,7 @@ public class Main {
                         LocalDate localDate = LocalDate.parse(date);
                         System.out.println("Список задач на " + localDate + ":");
                         try {
-                            taskService.checkTaskAvailability(taskService.getAllByDate(localDate));
-                            taskService.printTasks(taskService.getAllByDate(localDate));
+                            taskService.printTasks(taskService.getTasksByDate(localDate));
                         } catch (TaskNotFoundException e) {
                             System.out.println(e.getMessage());
                         }
@@ -68,6 +72,15 @@ public class Main {
                     }
                     break;
                 case "6":
+                    try {
+                        Map<LocalDate, List<Task>> tasksGroupedByDate = taskService.getGroupedByDate(taskService.getTaskMap());
+                        taskService.printGroupedByDate(tasksGroupedByDate);
+                    } catch (TaskNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    getMenu();
+                    break;
+                case "7":
                     System.out.println("Введите идентификационный номер задачи: ");
                     try {
                         taskId = scanner.nextInt();
@@ -81,7 +94,7 @@ public class Main {
                     getMenu();
                     scanner.nextLine();
                     break;
-                case "7":
+                case "8":
                     System.out.println("Введите идентификационный номер задачи: ");
                     try {
                         taskId = scanner.nextInt();
@@ -99,7 +112,7 @@ public class Main {
                     getMenu();
                     scanner.nextLine();
                     break;
-                case "8":
+                case "9":
                     System.out.println("Введите идентификационный номер задачи: ");
                     try {
                         taskId = scanner.nextInt();
@@ -117,7 +130,7 @@ public class Main {
                     getMenu();
                     scanner.nextLine();
                     break;
-                case "9":
+                case "10":
                     System.out.println("Архив задач (удаленных)");
                     try {
                         taskService.printTasks(taskService.getRemovedTasks());
@@ -126,7 +139,7 @@ public class Main {
                     }
                     getMenu();
                     break;
-                case "10":
+                case "11":
                     System.exit(0);
                 default:
                     System.out.println("Ошибка ввода! Введите значение, указанное в меню (цифры от 1 до 8)");
@@ -199,6 +212,7 @@ public class Main {
                 System.out.println("Введите дату в формате ГГГГ-ММ-ДД: ");
                 try {
                     String date = scanner.nextLine();
+                    checkDate(date);
                     LocalDate localDate = LocalDate.parse(date);
                     return new OneTimeTask(title, description, type, LocalDateTime.now(), localDate);
                 } catch (DateTimeParseException e) {
@@ -226,11 +240,12 @@ public class Main {
                 "\n 3 - удалить задачу " +
                 "\n 4 - вывести список задач на завтра" +
                 "\n 5 - вывести список задач на указанную дату " +
-                "\n 6 - получить информацию о следующей дате выполнения задачи (по номеру задачи)" +
-                "\n 7 - редактировать название задачи" +
-                "\n 8 - редактировать описание задачи " +
-                "\n 9 - архив задач (удаленных) " +
-                "\n 10 - выйти \n");
+                "\n 6 - вывести список всех задач, сгруппировав их по дате" +
+                "\n 7 - получить информацию о следующей дате выполнения задачи (по номеру задачи)" +
+                "\n 8 - редактировать название задачи" +
+                "\n 9 - редактировать описание задачи " +
+                "\n 10 - архив задач (удаленных) " +
+                "\n 11 - выйти \n");
     }
 
     // Блок проверки вводимых значений
@@ -241,9 +256,13 @@ public class Main {
     }
 
     public static void checkDate(String argument) {
-        LocalDate localDate = LocalDate.parse(argument);
-        if (argument.isEmpty() || argument.isBlank() || localDate.isBefore(LocalDate.now())) {
-            throw new DateTimeParseException("Введена неправильная дата!", argument, 2);
+        try {
+            LocalDate localDate = LocalDate.parse(argument);
+            if (argument.isEmpty() || argument.isBlank() || localDate.isBefore(LocalDate.now())) {
+                throw new DateTimeParseException("Введена неправильная дата! Дата не может быть раньше текущей!", argument, 2);
+            }
+        } catch (DateTimeParseException e) {
+            throw new DateTimeParseException("Ошибка ввода! Необходимо ввести дату в указанном формате.", argument, 0);
         }
     }
 }

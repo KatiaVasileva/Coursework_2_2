@@ -29,6 +29,9 @@ public class TaskService {
     }
 
     public void printAllTasks(Map<Integer, Task> taskMap) {
+        if (taskMap.isEmpty()) {
+            throw new TaskNotFoundException("Задач не найдено!");
+        }
         taskMap.forEach((key, value) -> System.out.println(key + ". " + value));
     }
 
@@ -45,23 +48,19 @@ public class TaskService {
         removedTasks.add(task);
     }
 
-    public void printTasks(List<Task> removedTasks) {
-        if (removedTasks.isEmpty()) {
-            throw new TaskNotFoundException("Архив пустой!");
+    public void printTasks(List<Task> tasks) {
+        if (tasks.isEmpty()) {
+            throw new TaskNotFoundException("Задач не найдено!");
         }
-        removedTasks.forEach(System.out::println);
+        tasks.forEach(System.out::println);
     }
 
-    public List<Task> getAllByDate(LocalDate localDate) {
+    public List<Task> getTasksByDate(LocalDate localDate) {
         List<Task> mapValues = new ArrayList<>((getTaskMap().values()));
         return mapValues.stream()
                 .filter(task -> task.appearsIn(localDate))
                 .collect(Collectors.toList());
     }
-
-    /*public void printTasksByDate(List<Task> tasksByDate) {
-        tasksByDate.forEach(System.out::println);
-    }*/
 
     public void updateTitle(int id, String title){
         for (Map.Entry<Integer, Task> task : getTaskMap().entrySet()) {
@@ -90,21 +89,37 @@ public class TaskService {
         System.out.println(task.getNextDate(task.getLocalDateTime()));
     }
 
-    public void getTasksForNextDay(Map<Integer, Task> taskMap) throws TaskNotFoundException{
-        taskMap.entrySet().stream()
-                .filter(task -> task.getValue().appearsIn(task.getValue().getLocalDateTime().toLocalDate().plusDays(1)))
-                .forEach(task -> System.out.println(task.getKey() + ". " + task.getValue()));
+    public List<Task> getTasksForNextDay(){
+        List<Task> tasksForNextDay = new ArrayList<>((getTaskMap().values()));
+        return tasksForNextDay.stream()
+                .filter(task -> task.appearsIn(task.getLocalDateTime().toLocalDate().plusDays(1)))
+                .collect(Collectors.toList());
     }
 
-    public void checkTaskAvailability(Map<Integer, Task> map) throws TaskNotFoundException {
-        if (map.isEmpty()) {
+    public Map<LocalDate, List<Task>> getGroupedByDate(Map<Integer, Task> taskMap) {
+        List<Task> taskList = new ArrayList<>(taskMap.values());
+        List<LocalDate> localDateList = taskList.stream()
+                .map(task -> task.getNextDate(task.getLocalDateTime()))
+                .sorted(new CompareByDate())
+                .collect(Collectors.toList());
+        Map<LocalDate,List<Task>> allTasksGroupedByDate = new LinkedHashMap<>();
+        for (LocalDate localDate : localDateList) {
+            allTasksGroupedByDate.put(localDate, getTasksByDate(localDate));
+        }
+        return allTasksGroupedByDate;
+    }
+
+    public void printGroupedByDate(Map<LocalDate, List<Task>> mapByDate) {
+        System.out.println("Список всех задач по датам");
+        if (mapByDate.isEmpty()) {
             throw new TaskNotFoundException("Задач не найдено!");
         }
-    }
-
-    public void checkTaskAvailability(List<Task> list) throws TaskNotFoundException{
-        if (list.isEmpty()) {
-            throw new TaskNotFoundException("Задач не найдено!");
+        for (Map.Entry<LocalDate, List<Task>> date : mapByDate.entrySet()) {
+            System.out.println(date.getKey() + ":");
+            List<Task> tasks = date.getValue();
+            for (Task task : tasks) {
+                System.out.println(task);
+            }
         }
     }
 }

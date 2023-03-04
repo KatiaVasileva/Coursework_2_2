@@ -24,11 +24,13 @@ public class OneTimeTask extends Task{
         this.timeOfTask = timeOfTask;
     }
 
+    // Метод для проверки повторяемости задачи
     @Override
     public boolean appearsIn(LocalDate localDate) {
         return timeOfTask.equals(localDate);
     }
 
+    // Метод для получения следующей даты выполнения задачи
     public LocalDate getNextDate(LocalDateTime localDateTime) {
         return timeOfTask;
     }

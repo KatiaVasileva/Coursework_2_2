@@ -12,11 +12,13 @@ public class DailyTask extends Task{
         super(title, description, type, localDateTime);
     }
 
+    // Метод для проверки повторяемости задачи
     @Override
     public boolean appearsIn(LocalDate localDate) {
         return true;
     }
 
+    // Метод для получения следующей даты выполнения задачи
     @Override
     public LocalDate getNextDate(LocalDateTime localDateTime) {
         LocalDate localDate = localDateTime.toLocalDate();

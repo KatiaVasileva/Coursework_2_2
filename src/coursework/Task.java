@@ -52,8 +52,10 @@ public abstract class Task {
         return localDateTime;
     }
 
+    // Метод для проверки повторяемости задачи
     public abstract boolean appearsIn(LocalDate localDate);
 
+    // Метод для получения следующей даты выполнения задачи
     public abstract LocalDate getNextDate(LocalDateTime localDateTime);
 
     @Override

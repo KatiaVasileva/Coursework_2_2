@@ -12,11 +12,13 @@ public class MonthlyTask extends Task{
         super(title, description, type, localDateTime);
     }
 
+    // Метод для проверки повторяемости задачи
     @Override
     public boolean appearsIn(LocalDate localDate) {
         return getLocalDateTime().getDayOfMonth() == localDate.getDayOfMonth();
     }
 
+    // Метод для получения следующей даты выполнения задачи
     public LocalDate getNextDate(LocalDateTime localDateTime) {
         LocalDate localDate = localDateTime.toLocalDate();
         return localDate.withMonth(getLocalDateTime().getMonthValue() + 1);

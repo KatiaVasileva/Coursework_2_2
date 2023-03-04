@@ -20,10 +20,12 @@ public class Main {
             String menu = scanner.nextLine();
             switch (menu) {
                 case "1":
+                    // добавить новую задачу
                     taskService.addTask(getRegularity(getTaskTitle(), getTaskDescription(), getTaskType(), LocalDateTime.now()));
                     getMenu();
                     break;
                 case "2":
+                    // вывести список всех задач
                     System.out.println("Список всех задач");
                     try {
                         taskService.printAllTasks(taskService.getTaskMap());
@@ -33,6 +35,7 @@ public class Main {
                     getMenu();
                     break;
                 case "3":
+                    // удалить задачу
                     System.out.println("Введите идентификационный номер задачи, которую нужно удалить: ");
                     int taskId = scanner.nextInt();
                     try {
@@ -45,6 +48,7 @@ public class Main {
                     scanner.nextLine();
                     break;
                 case "4":
+                    // вывести список задач на завтра
                     System.out.println("Список задач на завтра ");
                     try {
                         taskService.printTasks(taskService.getTasksForNextDay());
@@ -54,6 +58,7 @@ public class Main {
                     getMenu();
                     break;
                 case "5":
+                    // вывести список задач на указанную дату
                     System.out.println("Введите дату в формате ГГГГ-ММ-ДД: ");
                     String date = scanner.nextLine();
                     try {
@@ -72,6 +77,7 @@ public class Main {
                     }
                     break;
                 case "6":
+                    // вывести список всех задач, сгруппировав их по дате
                     try {
                         Map<LocalDate, List<Task>> tasksGroupedByDate = taskService.getGroupedByDate(taskService.getTaskMap());
                         taskService.printGroupedByDate(tasksGroupedByDate);
@@ -81,6 +87,7 @@ public class Main {
                     getMenu();
                     break;
                 case "7":
+                    // получить информацию о следующей дате выполнения задачи (по номеру задачи)
                     System.out.println("Введите идентификационный номер задачи: ");
                     try {
                         taskId = scanner.nextInt();
@@ -95,6 +102,7 @@ public class Main {
                     scanner.nextLine();
                     break;
                 case "8":
+                    // редактировать название задачи (по идентификационному номеру)
                     System.out.println("Введите идентификационный номер задачи: ");
                     try {
                         taskId = scanner.nextInt();
@@ -113,6 +121,7 @@ public class Main {
                     scanner.nextLine();
                     break;
                 case "9":
+                    // редактировать описание задачи (по идентификационному номеру)
                     System.out.println("Введите идентификационный номер задачи: ");
                     try {
                         taskId = scanner.nextInt();
@@ -131,6 +140,7 @@ public class Main {
                     scanner.nextLine();
                     break;
                 case "10":
+                    // получить архив задач (удаленных)
                     System.out.println("Архив задач (удаленных)");
                     try {
                         taskService.printTasks(taskService.getRemovedTasks());
@@ -149,6 +159,7 @@ public class Main {
         scanner.close();
     }
 
+    // Метод для считывания названия задачи из консоли
     public static String getTaskTitle() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите название задачи: ");
@@ -162,6 +173,7 @@ public class Main {
         }
     }
 
+    // Метод для считывания описания задачи из консоли
     public static String getTaskDescription() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите описание задачи: ");
@@ -175,6 +187,7 @@ public class Main {
         }
     }
 
+    // Метод для считывания типа задачи из консоли
     public static Type getTaskType() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите тип задачи (1 - рабочая, 2 - личная): ");
@@ -196,6 +209,7 @@ public class Main {
         }
     }
 
+    // Метод для считывания регулярности выполнения задачи из консоли
     public static Task getRegularity(String title, String description, Type type, LocalDateTime localDateTime) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Выберите повторяемость задачи (1 - однократно, 2 - ежедневно, 3 - еженедельно, " +
@@ -233,6 +247,7 @@ public class Main {
         }
     }
 
+    // Метод для вывода меню в консоль
     public static void getMenu() {
         System.out.println("\nВыберите: " +
                 "\n 1 - добавить новую задачу " +
